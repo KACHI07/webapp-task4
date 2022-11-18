@@ -63,17 +63,21 @@ resource "azurerm_app_service" "as" {
 
 }
 
-resource "azurerm_app_service_slot" "example" {
-  count               = var.WebAppX_count
-  name                = "WebAppXs-ass${count.index}"
+
+resource "azurerm_app_service_slot" "ass" {
+  name                = "WebAppXs-dev"
   app_service_name    = azurerm_app_service.as.name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   app_service_plan_id = azurerm_app_service_plan.asp.id
 
   site_config {
-    dotnet_framework_version = "v4.0"
+       linux_fx_version = "DOCKER|wordpress:latest"
   }
+
+  tags = {
+    image = "wordpress"
+ }
 
   app_settings = {
     "SOME_KEY" = "some-value"
