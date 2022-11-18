@@ -90,5 +90,27 @@ resource "azurerm_app_service_slot" "ass" {
   }
 }
 
+resource "azurerm_app_service_slot" "ass1" {
+  name                = "WebAppXs-prod"
+  app_service_name    = azurerm_app_service.as.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  app_service_plan_id = azurerm_app_service_plan.asp.id
+
+  site_config {
+       linux_fx_version = "DOCKER|mcr.microsoft.com/dotnet/samples:aspnetapp"
+  }
+
+  app_settings = {
+    "SOME_KEY" = "some-value"
+  }
+
+  connection_string {
+    name  = "Database"
+    type  = "SQLServer"
+    value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
+  }
+}
+
 
 
